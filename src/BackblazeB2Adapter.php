@@ -235,7 +235,9 @@ class BackblazeB2Adapter implements FilesystemAdapter, PublicUrlGenerator, Check
      */
     public function createDirectory(string $path, Config $config): void
     {
-        $path = $this->prefixer->prefixDirectoryPath($path);
+        //write() already prefixes the path itself - prefixing it here too
+        //would double-apply the adapter's prefix
+        $path = rtrim($path, static::DIRECTORY_DELIMITER) . static::DIRECTORY_DELIMITER;
 
         $this->write($path . File::VIRTUAL_DIRECTORY_SUFFIX, '', $config);
     }
